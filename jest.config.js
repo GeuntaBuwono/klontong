@@ -9,7 +9,7 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
-	setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+	setupFilesAfterEnv: ['<rootDir>/jest.setup.js', 'jest-localstorage-mock'],
 	moduleNameMapper: {
 		// Handle module aliases (this will be automatically configured for you soon)
 		'^@components/(.*)$': '<rootDir>/components/$1',
@@ -17,6 +17,7 @@ const customJestConfig = {
 		'^@pages/(.*)$': '<rootDir>/src/pages/$1',
 		'^@utils/(.*)$': '<rootDir>/src/utils/$1',
 	},
+	resetMocks: false,
 	testEnvironment: 'jest-environment-jsdom',
 	preset: 'ts-jest',
 	roots: ['<rootDir>/src'],
