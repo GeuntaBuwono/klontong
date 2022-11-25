@@ -1,12 +1,4 @@
-const exampleTest = ({
-	numberA,
-	numberB,
-}: {
-	numberA: number;
-	numberB: number;
-}) => {
-	return numberA + numberB;
-};
+import {exampleTest} from '@utils/example';
 
 describe('example test', () => {
 	test('testing plus', () => {
