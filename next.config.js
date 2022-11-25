@@ -5,6 +5,9 @@ const withRoutes = require('nextjs-routes/config')({
 });
 
 const nextConfig = {
+	images: {
+		domains: ['loremflickr.com'],
+	},
 	reactStrictMode: true,
 	swcMinify: true,
 };
