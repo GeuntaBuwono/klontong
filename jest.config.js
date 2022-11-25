@@ -2,12 +2,13 @@
 module.exports = {
 	preset: 'ts-jest',
 	roots: ['<rootDir>/src'],
-	testEnvironment: 'node',
 	moduleNameMapper: {
 		'^@components/(.*)$': '<rootDir>/src/components/$1',
 		'^@utils/(.*)$': '<rootDir>/src/utils/$1',
 	},
 	modulePathIgnorePatterns: ['node_modules', './src/pages'],
+	testEnvironment: 'jest-environment-jsdom',
+	coverageProvider: 'v8',
 	collectCoverageFrom: [
 		'src/**/*.{js,jsx,ts,tsx}',
 		'!src/**/*.d.ts',
