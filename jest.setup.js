@@ -7,8 +7,4 @@ import '@testing-library/jest-dom/extend-expect';
 
 import 'jest-localstorage-mock';
 
-jest.mock('next/router', () => {
-	return {
-		useRouter: () => jest.fn(),
-	};
-});
+jest.mock('next/router', () => require('next-router-mock'));
