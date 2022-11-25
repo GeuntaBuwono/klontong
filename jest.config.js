@@ -1,13 +1,26 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-	preset: 'ts-jest',
-	roots: ['<rootDir>/src'],
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const nextJest = require('next/jest');
+
+const createJestConfig = nextJest({
+	// Provide the path to your Next.js app to load next.config.js and .env files in your test environment
+	dir: './',
+});
+
+// Add any custom config to be passed to Jest
+const customJestConfig = {
+	setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 	moduleNameMapper: {
-		'^@components/(.*)$': '<rootDir>/src/components/$1',
+		// Handle module aliases (this will be automatically configured for you soon)
+		'^@components/(.*)$': '<rootDir>/components/$1',
+		'^@layouts/(.*)$': '<rootDir>/src/layouts/$1',
+		'^@pages/(.*)$': '<rootDir>/pages/$1',
 		'^@utils/(.*)$': '<rootDir>/src/utils/$1',
 	},
-	modulePathIgnorePatterns: ['node_modules', './src/pages'],
 	testEnvironment: 'jest-environment-jsdom',
+	preset: 'ts-jest',
+	roots: ['<rootDir>/src'],
+	modulePathIgnorePatterns: ['node_modules', './src/pages'],
 	coverageProvider: 'v8',
 	collectCoverageFrom: [
 		'src/**/*.{js,jsx,ts,tsx}',
@@ -24,3 +37,5 @@ module.exports = {
 	},
 	coverageReporters: ['text'],
 };
+
+module.exports = createJestConfig(customJestConfig);
