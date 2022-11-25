@@ -42,7 +42,7 @@ type MainProps = {
 
 const Main = ({children, pageTitle, isCenterContent}: MainProps) => {
 	const mainClass = classNames(
-		'flex flex-1 flex-col items-center content-center py-16 min-h-screen px-8 pb-20',
+		'flex flex-1 flex-col items-center content-center py-8 min-h-screen px-8 pb-20',
 		isCenterContent ? 'justify-center' : '',
 	);
 

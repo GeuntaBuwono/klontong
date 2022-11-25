@@ -39,7 +39,7 @@ export default function ProductDetailPage() {
 					placeholder="blur"
 					style={{
 						width: '100%',
-						height: '512px',
+						maxHeight: '512px',
 						objectFit: 'contain',
 					}}
 				/>
