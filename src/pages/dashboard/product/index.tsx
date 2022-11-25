@@ -51,13 +51,12 @@ const ProductCard = ({
 	return (
 		<Link
 			href={{
-				pathname: '/dashboard/product',
-				query: {productId: String(id)},
+				pathname: '/dashboard/product/[id]',
+				query: {id: String(id)},
 			}}
 			className="bg-slate-100 text-white rounded-xl dark:bg-slate-800 md:max-w-md"
 		>
 			<Image
-				className="mx-auto"
 				src={image}
 				alt={description}
 				blurDataURL={rgbDataURL(243, 243, 243)}
@@ -84,7 +83,7 @@ const ProductCard = ({
 				</div>
 
 				<div className={borderClassName}>
-					<h4 className="text-center border-b-2 mb-2 font-semibold">
+					<h4 className="text-center border-b-2 mb-2 pb-2 font-semibold">
 						Product Detail
 					</h4>
 					<p>Height: {height}</p>
@@ -183,6 +182,11 @@ export default function ProductPage() {
 	const {data: products, isLoading: isLoadingProduct} = useQuery(
 		['products', activePage],
 		productDataBuilder,
+		{
+			onSuccess: data => {
+				localStorage.setItem('products', JSON.stringify(data));
+			},
+		},
 	);
 
 	return (

@@ -1,5 +1,7 @@
 import classNames from 'classnames';
 import Head from 'next/head';
+import Link from 'next/link';
+import {useRouter} from 'next/router';
 import React from 'react';
 
 const Meta = () => (
@@ -10,6 +12,28 @@ const Meta = () => (
 	</Head>
 );
 
+const Navigation = () => {
+	const router = useRouter();
+	const isDetailProduct = router.pathname === '/dashboard/product/[id]';
+
+	const navigationClassName = classNames(
+		'h-16 px-4 bg-yellow-200',
+		isDetailProduct ? 'flex' : 'hidden',
+	);
+
+	return (
+		<nav className={navigationClassName}>
+			<Link
+				href="/dashboard/product"
+				className="flex flex-1 items-center px-4 h-full cursor-pointer"
+			>
+				<p className="text-2xl mr-2">&#5130;</p>
+				<p>Back</p>
+			</Link>
+		</nav>
+	);
+};
+
 type MainProps = {
 	children: React.ReactNode;
 	pageTitle: string;
@@ -18,7 +42,7 @@ type MainProps = {
 
 const Main = ({children, pageTitle, isCenterContent}: MainProps) => {
 	const mainClass = classNames(
-		'flex flex-1 flex-col items-center content-center py-16 min-h-screen',
+		'flex flex-1 flex-col items-center content-center py-16 min-h-screen px-8 pb-20',
 		isCenterContent ? 'justify-center' : '',
 	);
 
@@ -47,8 +71,9 @@ export default function DashboardLayout({
 	isCenterContent,
 }: DashboardLayoutProps) {
 	return (
-		<div className="px-8 pb-20">
+		<div>
 			<Meta />
+			<Navigation />
 			<Main isCenterContent={isCenterContent} pageTitle={pageTitle}>
 				{children}
 			</Main>
