@@ -17,7 +17,8 @@
 		"prepare": "husky install",
 		"start": "next start",
 		"test:ci": "yarn test --ci",
-		"test:coverage": "yarn test --coverage",
+		"test:coverage": "jest --coverage",
+		"test:snapshot:update": "jest -u",
 		"test": "jest --watchAll=false",
 		"watch:test": "jest --watch"
 	},
