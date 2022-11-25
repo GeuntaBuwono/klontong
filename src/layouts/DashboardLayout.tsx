@@ -47,7 +47,7 @@ export default function DashboardLayout({
 	isCenterContent,
 }: DashboardLayoutProps) {
 	return (
-		<div className="px-8">
+		<div className="px-8 pb-20">
 			<Meta />
 			<Main isCenterContent={isCenterContent} pageTitle={pageTitle}>
 				{children}

@@ -2,7 +2,7 @@ import {faker} from '@faker-js/faker';
 
 const MAX_PRODUCT = 10;
 
-export const productDataBuilder = () => {
+export const productDataBuilder = (): Array<ProductType> => {
 	const products: Array<ProductType> = [];
 
 	for (let index = 0; index < MAX_PRODUCT; index++) {
@@ -17,7 +17,7 @@ export const productDataBuilder = () => {
 			width: faker.datatype.number(),
 			length: faker.datatype.number(),
 			height: faker.datatype.number(),
-			image: faker.image.business(),
+			image: `${faker.image.business()}?random=${Date.now()}`,
 			harga: Number(faker.commerce.price()),
 		};
 		products.push(productEntity);
