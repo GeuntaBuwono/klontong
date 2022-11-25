@@ -1,19 +1,15 @@
-import Head from 'next/head';
+import DashboardLayout from '@layouts/DashboardLayout';
+import Link from 'next/link';
 
 export default function Home() {
 	return (
-		<div className="px-8">
-			<Head>
-				<title>Klontong</title>
-				<meta name="description" content="Klontong Web Description" />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
-
-			<main className="flex flex-1 justify-center items-center content-center py-16 min-h-screen">
-				<h1 className="text-4xl font-bold underline">
-					Hello world! here from tailwinds css
-				</h1>
-			</main>
-		</div>
+		<DashboardLayout>
+			<div className="pb-2">
+				<h1 className="text-4xl font-bold">Klontong</h1>
+			</div>
+			<Link href="/" className="border-blue-400 border-2 p-2 text-2xl">
+				<h3>Product</h3>
+			</Link>
+		</DashboardLayout>
 	);
 }

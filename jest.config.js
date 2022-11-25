@@ -14,13 +14,17 @@ const customJestConfig = {
 		// Handle module aliases (this will be automatically configured for you soon)
 		'^@components/(.*)$': '<rootDir>/components/$1',
 		'^@layouts/(.*)$': '<rootDir>/src/layouts/$1',
-		'^@pages/(.*)$': '<rootDir>/pages/$1',
+		'^@pages/(.*)$': '<rootDir>/src/pages/$1',
 		'^@utils/(.*)$': '<rootDir>/src/utils/$1',
 	},
 	testEnvironment: 'jest-environment-jsdom',
 	preset: 'ts-jest',
 	roots: ['<rootDir>/src'],
-	modulePathIgnorePatterns: ['node_modules', './src/pages'],
+	modulePathIgnorePatterns: [
+		'node_modules',
+		'./src/pages/dashboard',
+		'./src/pages/_app.tsx',
+	],
 	coverageProvider: 'v8',
 	collectCoverageFrom: [
 		'src/**/*.{js,jsx,ts,tsx}',
