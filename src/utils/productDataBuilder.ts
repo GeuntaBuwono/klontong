@@ -1,6 +1,6 @@
 import {faker} from '@faker-js/faker';
 
-const MAX_PRODUCT = 100;
+const MAX_PRODUCT = 10;
 
 export const productDataBuilder = () => {
 	const products: Array<ProductType> = [];
@@ -12,12 +12,12 @@ export const productDataBuilder = () => {
 			categoryName: faker.commerce.product(),
 			sku: faker.random.alphaNumeric().toUpperCase(),
 			name: faker.commerce.productName(),
-			description: faker.commerce.productDescription(),
+			description: faker.lorem.paragraphs(),
 			weight: 500,
 			width: faker.datatype.number(),
 			length: faker.datatype.number(),
 			height: faker.datatype.number(),
-			image: 'https://cf.shopee.co.id/file/7cb930d1bd183a435f4fb3e5cc4a896b',
+			image: faker.image.business(),
 			harga: Number(faker.commerce.price()),
 		};
 		products.push(productEntity);

@@ -3,7 +3,7 @@ import {productDataBuilder} from '@utils/productDataBuilder';
 describe('Product Data Builder', () => {
 	test('should be have 100 length', () => {
 		const testValue = productDataBuilder();
-		expect(testValue).toHaveLength(100);
+		expect(testValue).toHaveLength(10);
 	});
 
 	test('check data type', () => {
