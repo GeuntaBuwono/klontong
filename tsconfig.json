@@ -14,8 +14,13 @@
 		"isolatedModules": false,
 		"jsx": "preserve",
 		"incremental": true,
-		"allowSyntheticDefaultImports": true,
-		"noFallthroughCasesInSwitch": true
+		"baseUrl": "src",
+		"paths": {
+			"@components/*": ["components/*"],
+			"@pages/*": ["pages/*"],
+			"@styles/*": ["styles/*"],
+			"@utils/*": ["utils/*"]
+		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules"]
