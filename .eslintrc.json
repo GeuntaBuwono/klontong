@@ -1,3 +1,152 @@
 {
-	"extends": "next/core-web-vitals"
+	"ignorePatterns": [".eslintrc.json"],
+	"env": {
+		"jest/globals": true
+	},
+	"parser": "@typescript-eslint/parser",
+	"plugins": [
+		"@typescript-eslint",
+		"eslint-plugin-import-helpers",
+		"sonarjs",
+		"prettier"
+	],
+	"extends": [
+		"eslint:recommended",
+		"next/core-web-vitals",
+		"prettier",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:sonarjs/recommended",
+		"plugin:prettier/recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"overrides": [
+		{
+			"files": ["*.test.ts", "*.test.tsx"],
+			"plugins": ["jest"],
+			"extends": ["plugin:jest/recommended", "plugin:jest/style"],
+			"parserOptions": {
+				"ecmaFeatures": {
+					"jsx": true
+				},
+				"project": ["./tsconfig.json"],
+				"ecmaVersion": 12,
+				"sourceType": "module"
+			},
+			"rules": {
+				// prefer todo is used for check unimplement test case, change value to error to include rules to error lint
+				// https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-todo.md
+				"@typescript-eslint/unbound-method": "off",
+				"jest/prefer-strict-equal": "error",
+				"jest/prefer-todo": "error",
+				"jest/unbound-method": "error",
+				"jest/prefer-spy-on": "error",
+				"jest/prefer-expect-resolves": "error",
+				"jest/prefer-comparison-matcher": "error",
+				"jest/max-nested-describe": ["error", {"max": 2}],
+				"jest/prefer-lowercase-title": [
+					"error",
+					{
+						"ignore": ["describe"]
+					}
+				],
+				"jest/consistent-test-it": [
+					"error",
+					{"fn": "it", "withinDescribe": "test"}
+				],
+				"@typescript-eslint/naming-convention": [
+					"warn",
+					{
+						"selector": "default",
+						"format": ["camelCase", "UPPER_CASE", "PascalCase", "snake_case"],
+						"leadingUnderscore": "allow"
+					}
+				]
+			}
+		}
+	],
+	"rules": {
+		"@typescript-eslint/no-unused-vars": "error",
+		"@typescript-eslint/no-explicit-any": "error",
+		"@typescript-eslint/naming-convention": [
+			"error",
+			{
+				"selector": "enum",
+				"format": ["PascalCase"],
+				"suffix": ["Enum"]
+			}
+		],
+		"prefer-destructuring": [
+			"error",
+			{
+				"array": true,
+				"object": true
+			},
+			{
+				"enforceForRenamedProperties": false
+			}
+		],
+		"@typescript-eslint/array-type": [
+			"error",
+			{
+				"default": "generic"
+			}
+		],
+		"@typescript-eslint/ban-ts-comment": "warn",
+		"@typescript-eslint/consistent-generic-constructors": "error",
+		"@typescript-eslint/consistent-indexed-object-style": "error",
+		"@typescript-eslint/consistent-type-definitions": ["error", "type"],
+		"@typescript-eslint/indent": "off",
+		"@typescript-eslint/no-duplicate-enum-values": "error",
+		"@typescript-eslint/no-shadow": "error",
+		"@typescript-eslint/no-use-before-define": "error",
+		"class-methods-use-this": "off",
+		"import/prefer-default-export": 0,
+		"no-inline-comments": "error",
+		"no-nested-ternary": "warn",
+		"no-shadow": "off",
+		"no-unreachable": "error",
+		"no-unused-vars": "off",
+		"no-restricted-imports": [
+			"warn",
+			{
+				"patterns": [
+					{
+						"group": ["../*"],
+						"message": "Usage of relative parent imports is not allowed."
+					}
+				]
+			}
+		],
+		"react-hooks/exhaustive-deps": "warn",
+		"react-hooks/rules-of-hooks": "error",
+		"react/button-has-type": "off",
+		"react/display-name": "warn",
+		"react/jsx-props-no-spreading": "warn",
+		"react/jsx-boolean-value": "error",
+		"react/jsx-closing-bracket-location": "error",
+		"react/jsx-closing-tag-location": "error",
+		"react/jsx-curly-newline": "off",
+		"react/jsx-filename-extension": ["error", {"extensions": [".tsx", ".jsx"]}],
+		"react/jsx-indent-props": [2, "tab"],
+		"react/jsx-indent": "off",
+		"no-console": "error",
+		"react/jsx-tag-spacing": [
+			2,
+			{
+				"beforeSelfClosing": "always"
+			}
+		],
+		"react/jsx-wrap-multilines": [
+			2,
+			{
+				"declaration": "parens-new-line",
+				"assignment": "parens-new-line",
+				"return": "parens-new-line",
+				"arrow": "ignore",
+				"condition": "ignore",
+				"logical": "ignore",
+				"prop": "ignore"
+			}
+		]
+	}
 }

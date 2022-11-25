@@ -14,8 +14,6 @@ describe('example test', () => {
 			numberA: 5,
 			numberB: 4,
 		});
-		expect(testValue).toStrictEqual(9);
+		expect(testValue).toBe(9);
 	});
 });
-
-export {};
