@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Dashboard Layout snapshot 1`] = `
-<DashboardLayout>
+<DashboardLayout
+  pageTitle="Testing"
+>
   Testing
 </DashboardLayout>
 `;
