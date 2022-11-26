@@ -193,7 +193,7 @@ export default function ProductPage() {
 		<DashboardLayout pageTitle="Product">
 			<div className="flex pb-4 text-center">
 				<Link
-					href="/dashboard/product"
+					href="/dashboard/product/add"
 					className="border-blue-400 border-2 p-2 text-2xl"
 				>
 					<h3>Add Product</h3>

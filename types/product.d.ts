@@ -1,14 +1,17 @@
 type ProductType = {
-	id: number;
 	CategoryId: number;
 	categoryName: string;
-	sku: string;
-	name: string;
 	description: string;
+	harga: number;
+	height: number;
+	id: number;
+	image: string;
+	length: number;
+	name: string;
+	sku: string;
 	weight: number;
 	width: number;
-	length: number;
-	height: number;
-	image: string;
-	harga: number;
 };
+
+type OmitKeyForPostProductType = 'id' | 'CategoryId';
+type PostProductType = Partial<Omit<ProductType, OmitKeyForPostProductType>>;

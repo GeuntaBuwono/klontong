@@ -14,7 +14,9 @@ const Meta = () => (
 
 const Navigation = () => {
 	const router = useRouter();
-	const isDetailProduct = router.pathname === '/dashboard/product/[id]';
+	const isDetailProduct =
+		router.pathname === '/dashboard/product/[id]' ||
+		router.pathname === '/dashboard/product/add';
 
 	const navigationClassName = classNames(
 		'h-16 px-4 bg-yellow-200',
