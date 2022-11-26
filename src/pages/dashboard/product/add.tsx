@@ -1,7 +1,9 @@
-import FormInput from '@components/FormInput/FormInput';
+import FormInput from '@components/Form/FormInput';
+import FormUploadImage from '@components/Form/FormUploadImage';
 import DashboardLayout from '@layouts/DashboardLayout';
 import classNames from 'classnames';
 import {useFormik} from 'formik';
+import Image from 'next/image';
 import * as yup from 'yup';
 
 const labelFormatterFormInput = ({value}: {value: string}) => {
@@ -62,28 +64,72 @@ export default function AddProductPage() {
 	return (
 		<DashboardLayout pageTitle="Add Product">
 			<form onSubmit={formik.handleSubmit} className="w-full max-w-md">
-				{Object.keys(formik.values).map(key => {
-					return (
-						<div key={key}>
-							<FormInput
-								id={key}
-								label={labelFormatterFormInput({value: key})}
-								placeholder={`Please input your ${labelFormatterFormInput({
-									value: key,
-								})}`}
-								value={formik.values[key as keyof PostProductType]}
-								onChange={formik.handleChange}
-								onBlur={formik.handleBlur}
-								errorMessage={
-									formik.errors[key as keyof PostProductType] &&
-									formik.touched[key as keyof PostProductType]
-										? formik.errors[key as keyof PostProductType]
-										: null
-								}
-							/>
+				{formik.values.image ? (
+					<>
+						<Image
+							src={URL.createObjectURL(formik.values.image as unknown as Blob)}
+							alt=""
+							className="rounded-sm"
+							width={500}
+							height={500}
+							style={{
+								width: '100%',
+								height: 'auto',
+								maxHeight: '500px',
+							}}
+						/>
+						<div className="flex flex-1">
+							<button
+								className="w-full py-2 bg-red-400 text-white rounded-b-sm"
+								onClick={() => formik.setFieldValue('image', '')}
+							>
+								<span>Remove Image</span>
+							</button>
 						</div>
-					);
-				})}
+					</>
+				) : (
+					<FormUploadImage
+						id="image"
+						onBlur={formik.handleBlur}
+						onChange={event => {
+							const imageFilePath = event.target.files && event.target.files[0];
+							formik.setFieldValue('image', imageFilePath);
+						}}
+						errorMessage={
+							formik.errors.image && formik.touched.image
+								? formik.errors.image
+								: null
+						}
+					/>
+				)}
+
+				{Object.keys(formik.values)
+					.sort()
+					.map(key => {
+						if (key !== 'image') {
+							return (
+								<div key={key}>
+									<FormInput
+										id={key}
+										label={labelFormatterFormInput({value: key})}
+										placeholder={`Please input your ${labelFormatterFormInput({
+											value: key,
+										})}`}
+										value={formik.values[key as keyof PostProductType]}
+										onChange={formik.handleChange}
+										onBlur={formik.handleBlur}
+										errorMessage={
+											formik.errors[key as keyof PostProductType] &&
+											formik.touched[key as keyof PostProductType]
+												? formik.errors[key as keyof PostProductType]
+												: null
+										}
+									/>
+								</div>
+							);
+						}
+						return null;
+					})}
 				<button
 					type="submit"
 					className={btnSubmitClassName}
