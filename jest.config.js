@@ -12,7 +12,7 @@ const customJestConfig = {
 	setupFilesAfterEnv: ['<rootDir>/jest.setup.js', 'jest-localstorage-mock'],
 	moduleNameMapper: {
 		// Handle module aliases (this will be automatically configured for you soon)
-		'^@components/(.*)$': '<rootDir>/components/$1',
+		'^@components/(.*)$': '<rootDir>/src/components/$1',
 		'^@layouts/(.*)$': '<rootDir>/src/layouts/$1',
 		'^@pages/(.*)$': '<rootDir>/src/pages/$1',
 		'^@utils/(.*)$': '<rootDir>/src/utils/$1',
