@@ -64,8 +64,8 @@ const ProductCard = ({
 				height="250"
 				placeholder="blur"
 				style={{
-					width: '100%',
-					height: '250px',
+					height: 'auto',
+					maxHeight: '200px',
 				}}
 			/>
 			<div className="px-6 py-4">
