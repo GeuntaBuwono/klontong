@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormInput snapshot 1`] = `
+<FormInput
+  id="testing"
+  label="testing"
+  onBlur={[MockFunction]}
+  onChange={[MockFunction]}
+  placeholder="placeholder testing"
+/>
+`;
