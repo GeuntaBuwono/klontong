@@ -32,6 +32,10 @@ const ProductCardSkeleton = () => (
 	</div>
 );
 
+type ProductTypeProps = {
+	onClickDelete: () => void;
+} & ProductType;
+
 const ProductCard = ({
 	id,
 	image,
@@ -45,58 +49,68 @@ const ProductCard = ({
 	height,
 	harga,
 	CategoryId,
-}: ProductType) => {
+	onClickDelete,
+}: ProductTypeProps) => {
 	const borderClassName = classNames('border-2 p-2 my-2');
 
 	return (
-		<Link
-			href={{
-				pathname: '/dashboard/product/[id]',
-				query: {id: String(id)},
-			}}
-			className="bg-slate-100 text-white rounded-xl dark:bg-slate-800 md:max-w-md"
-		>
-			<Image
-				src={image}
-				alt={description}
-				blurDataURL={rgbDataURL(243, 243, 243)}
-				width="512"
-				height="250"
-				placeholder="blur"
-				style={{
-					height: 'auto',
-					maxHeight: '200px',
+		<div className="bg-slate-100 text-white rounded-xl dark:bg-slate-800 md:max-w-md">
+			<Link
+				href={{
+					pathname: '/dashboard/product/[id]',
+					query: {id: String(id)},
 				}}
-			/>
-			<div className="px-6 py-4">
-				<div className="mb-2">
-					<p className="text-2xl font-semibold text-center line-clamp-1">
-						{name}
-					</p>
-					<p className="line-clamp-3">{description}</p>
-				</div>
+			>
+				<Image
+					src={image}
+					alt={description}
+					blurDataURL={rgbDataURL(243, 243, 243)}
+					width="512"
+					height="250"
+					placeholder="blur"
+					style={{
+						height: 'auto',
+						maxHeight: '200px',
+					}}
+				/>
+				<div className="px-6 py-4">
+					<div className="mb-2">
+						<p className="text-2xl font-semibold text-center line-clamp-1">
+							{name}
+						</p>
+						<p className="line-clamp-3">{description}</p>
+					</div>
 
-				<div className={borderClassName}>
-					<p>Category ID: {CategoryId}</p>
-					<p>Category Name: {categoryName}</p>
-					<p>SKU: {sku}</p>
-				</div>
+					<div className={borderClassName}>
+						<p>Category ID: {CategoryId}</p>
+						<p>Category Name: {categoryName}</p>
+						<p>SKU: {sku}</p>
+					</div>
 
-				<div className={borderClassName}>
-					<h4 className="text-center border-b-2 mb-2 pb-2 font-semibold">
-						Product Detail
-					</h4>
-					<p>Height: {height}</p>
-					<p>Width: {width}</p>
-					<p>Weight: {weight}</p>
-					<p>Length: {length}</p>
+					<div className={borderClassName}>
+						<h4 className="text-center border-b-2 mb-2 pb-2 font-semibold">
+							Product Detail
+						</h4>
+						<p>Height: {height}</p>
+						<p>Width: {width}</p>
+						<p>Weight: {weight}</p>
+						<p>Length: {length}</p>
+					</div>
 				</div>
+				<div className="px-6 py-4 flex justify-between text-lg font-semibold">
+					<span>Harga</span>
+					<p>Rp.{harga}</p>
+				</div>
+			</Link>
+			<div className="flex flex-1 justify-center">
+				<button
+					className="w-full py-2 bg-red-700 text-white rounded-b-sm"
+					onClick={onClickDelete}
+				>
+					<span>Remove Product</span>
+				</button>
 			</div>
-			<div className="px-6 py-4 flex justify-between text-lg font-semibold">
-				<span>Harga</span>
-				<p>Rp.{harga}</p>
-			</div>
-		</Link>
+		</div>
 	);
 };
 
@@ -179,15 +193,15 @@ const NoDataFound = () => <h4>No Product found you</h4>;
 
 export default function ProductPage() {
 	const [activePage, setActivePage] = useState(1);
-	const {data: products, isLoading: isLoadingProduct} = useQuery(
-		['products', activePage],
-		productDataBuilder,
-		{
-			onSuccess: data => {
-				localStorage.setItem('products', JSON.stringify(data));
-			},
+	const {
+		data: products,
+		isLoading: isLoadingProduct,
+		refetch: refetchProducts,
+	} = useQuery(['products', activePage], productDataBuilder, {
+		onSuccess: data => {
+			localStorage.setItem('products', JSON.stringify(data));
 		},
-	);
+	});
 
 	return (
 		<DashboardLayout pageTitle="Product">
@@ -214,7 +228,27 @@ export default function ProductPage() {
 				<>
 					<div className="flex flex-col gap-4 md:grid md:grid-cols-3">
 						{products?.map(product => (
-							<ProductCard key={product.id} {...product} />
+							<ProductCard
+								key={product.id}
+								onClickDelete={() => {
+									const productsFromLocalStorage: Array<ProductType> =
+										JSON.parse(localStorage.getItem('products') as string);
+
+									const selectedProductByIndex =
+										productsFromLocalStorage.findIndex(
+											data => data.id === product.id,
+										);
+
+									productsFromLocalStorage.splice(selectedProductByIndex, 1);
+									localStorage.setItem(
+										'products',
+										JSON.stringify(productsFromLocalStorage),
+									);
+
+									refetchProducts();
+								}}
+								{...product}
+							/>
 						))}
 					</div>
 					<Pagination
