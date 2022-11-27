@@ -132,11 +132,7 @@ export default function AddProductPage() {
 				{formik.values.image ? (
 					<>
 						<Image
-							src={
-								typeof formik.values.image === 'string'
-									? formik.values.image
-									: URL.createObjectURL(formik.values.image as unknown as Blob)
-							}
+							src={formik.values.image}
 							alt="product-image"
 							className="rounded-sm"
 							width={500}
@@ -163,9 +159,11 @@ export default function AddProductPage() {
 						id="image"
 						onBlur={formik.handleBlur}
 						onChange={event => {
-							const imageFilePath =
-								event.currentTarget.files && event.currentTarget.files[0];
-							formik.setFieldValue('image', imageFilePath);
+							const imageFilePath = event.target.files && event.target.files[0];
+							formik.setFieldValue(
+								'image',
+								URL.createObjectURL(imageFilePath as unknown as Blob),
+							);
 						}}
 						errorMessage={formik.errors.image ? formik.errors.image : null}
 					/>
