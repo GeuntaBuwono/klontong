@@ -28,7 +28,7 @@ const AddProductSchema = yup.object({
 	categoryName: yup.string().min(2).max(20).required(),
 	width: yup.number().min(1).required(),
 	weight: yup.number().min(1).required(),
-	sku: yup.string().min(5).max(20).required(),
+	sku: yup.string().min(5).max(5).required(),
 	name: yup.string().min(2).max(100).required(),
 	length: yup.number().min(1).required(),
 	image: yup.string().required(),
@@ -43,7 +43,7 @@ const INITIAL_VALUE_ADD_PRODUCT = {
 	description: '',
 	harga: 0,
 	height: 0,
-	image: 'https://loremflickr.com/640/480/abstract?random=1669417413823',
+	image: '',
 	length: 0,
 	name: '',
 	sku: '',
@@ -125,11 +125,18 @@ export default function AddProductPage() {
 
 	return (
 		<DashboardLayout pageTitle={`${isEditing ? 'Edit' : 'Add'} Product`}>
-			<form onSubmit={formik.handleSubmit} className="w-full max-w-md">
+			<form
+				onSubmit={isFormHasError ? undefined : formik.handleSubmit}
+				className="w-full max-w-md"
+			>
 				{formik.values.image ? (
 					<>
 						<Image
-							src={formik.values.image}
+							src={
+								typeof formik.values.image === 'string'
+									? formik.values.image
+									: URL.createObjectURL(formik.values.image as unknown as Blob)
+							}
 							alt="product-image"
 							className="rounded-sm"
 							width={500}
@@ -156,11 +163,9 @@ export default function AddProductPage() {
 						id="image"
 						onBlur={formik.handleBlur}
 						onChange={event => {
-							const imageFilePath = event.target.files && event.target.files[0];
-							formik.setFieldValue(
-								'image',
-								URL.createObjectURL(imageFilePath as unknown as Blob),
-							);
+							const imageFilePath =
+								event.currentTarget.files && event.currentTarget.files[0];
+							formik.setFieldValue('image', imageFilePath);
 						}}
 						errorMessage={formik.errors.image ? formik.errors.image : null}
 					/>
