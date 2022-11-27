@@ -60,15 +60,12 @@ export const ProductCard = ({
 			{typeof image === 'string' && (
 				<Image
 					src={image}
-					alt={description}
+					alt={name}
 					blurDataURL={rgbDataURL(243, 243, 243)}
 					width="512"
 					height="250"
 					placeholder="blur"
-					style={{
-						height: 'auto',
-						maxHeight: '200px',
-					}}
+					className="object-fill w-auto h-auto max-h-[500px]"
 				/>
 			)}
 			<div className="px-6 py-4">

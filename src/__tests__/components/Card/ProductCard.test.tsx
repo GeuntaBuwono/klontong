@@ -44,7 +44,7 @@ describe('ProductCard', () => {
 		});
 
 		const testImage = screen.getByRole('img', {
-			name: 'testing description',
+			name: 'testing name',
 		});
 
 		expect(testButtonRemove).toBeTruthy();
