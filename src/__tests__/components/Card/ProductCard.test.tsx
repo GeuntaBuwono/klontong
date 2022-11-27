@@ -19,6 +19,7 @@ describe('ProductCardSkeleton', () => {
 describe('ProductCard', () => {
 	const testElement = (
 		<ProductCard
+			onClickEdit={jest.fn()}
 			description="testing description"
 			onClickDelete={jest.fn()}
 			name="testing name"
@@ -34,15 +35,20 @@ describe('ProductCard', () => {
 
 	test('render correctly', () => {
 		render(testElement);
-		const testButton = screen.getByRole('button', {
-			name: 'Remove Product',
+		const testButtonRemove = screen.getByRole('button', {
+			name: 'Remove',
+		});
+
+		const testButtonEdit = screen.getByRole('button', {
+			name: 'Edit',
 		});
 
 		const testImage = screen.getByRole('img', {
 			name: 'testing description',
 		});
 
-		expect(testButton).toBeTruthy();
+		expect(testButtonRemove).toBeTruthy();
+		expect(testButtonEdit).toBeTruthy();
 		expect(testImage).toBeTruthy();
 	});
 });

@@ -29,6 +29,7 @@ export const ProductCardSkeleton = () => (
 
 type ProductCardProps = {
 	onClickDelete: () => void;
+	onClickEdit: () => void;
 } & Omit<
 	ProductType,
 	| 'categoryName'
@@ -46,6 +47,7 @@ export const ProductCard = ({
 	description,
 	name,
 	harga,
+	onClickEdit,
 	onClickDelete,
 }: ProductCardProps) => (
 	<div className="bg-slate-100 text-white rounded-xl dark:bg-slate-800 md:max-w-md">
@@ -82,10 +84,16 @@ export const ProductCard = ({
 		</Link>
 		<div className="flex flex-1 justify-center">
 			<button
-				className="w-full py-2 bg-red-700 text-white rounded-b-sm"
+				className="w-full py-2 bg-blue-600 text-white rounded-b-sm"
+				onClick={onClickEdit}
+			>
+				<span>Edit</span>
+			</button>
+			<button
+				className="w-full py-2 bg-red-600 text-white rounded-b-sm"
 				onClick={onClickDelete}
 			>
-				<span>Remove Product</span>
+				<span>Remove</span>
 			</button>
 		</div>
 	</div>

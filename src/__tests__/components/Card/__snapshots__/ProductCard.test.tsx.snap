@@ -8,6 +8,7 @@ exports[`ProductCard snapshot 1`] = `
   image="https://loremflickr.com/640/480/abstract?random=1669555427495"
   name="testing name"
   onClickDelete={[MockFunction]}
+  onClickEdit={[MockFunction]}
 />
 `;
 

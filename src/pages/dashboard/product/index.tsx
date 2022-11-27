@@ -5,6 +5,7 @@ import DashboardLayout from '@layouts/DashboardLayout';
 import {queryClient} from '@pages/_app';
 import {DELETE_productById} from '@services/DELETE_productById';
 import {GET_products, GET_ProductsResponse} from '@services/GET_products';
+import classNames from 'classnames';
 import {useFormik} from 'formik';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
@@ -94,6 +95,15 @@ export default function ProductPage() {
 
 	const isLoadingPage = isLoadingProduct || isLoadingDeleteProduct;
 
+	const isFormHasError =
+		Object.keys(formik.touched).length === 0 ||
+		Object.keys(formik.errors).length !== 0;
+
+	const btnSubmitClassName = classNames(
+		'bg-blue-400 rounded-sm p-2 w-full text-white',
+		isFormHasError ? 'disabled bg-gray-300 cursor-not-allowed' : '',
+	);
+
 	return (
 		<DashboardLayout pageTitle="Product">
 			<div className="flex pb-4 text-center flex-col w-full max-w-md">
@@ -117,6 +127,20 @@ export default function ProductPage() {
 								: null
 						}
 					/>
+					<button
+						type="submit"
+						className={btnSubmitClassName}
+						disabled={isFormHasError}
+					>
+						{isLoadingProduct ? (
+							<div className="flex items-center justify-center">
+								<div className="w-6 h-6 border-b-2 border-blue-500 rounded-full animate-spin"></div>
+								<span className="ml-4">Loading...</span>
+							</div>
+						) : (
+							<span>Submit</span>
+						)}
+					</button>
 				</form>
 			</div>
 
@@ -136,6 +160,12 @@ export default function ProductPage() {
 						{products?.data?.map(product => (
 							<ProductCard
 								key={product.id}
+								onClickEdit={() => {
+									push({
+										pathname: '/dashboard/product/add',
+										query: {editing: encodeURI(String(product.id))},
+									});
+								}}
 								onClickDelete={() => {
 									mutationAsyncDeleteProduct({
 										productId: product.id,
