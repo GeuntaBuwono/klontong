@@ -20,6 +20,7 @@
 			"@pages/*": ["pages/*"],
 			"@layouts/*": ["layouts/*"],
 			"@styles/*": ["styles/*"],
+			"@services/*": ["services/*"],
 			"@utils/*": ["utils/*"]
 		}
 	},
