@@ -7,9 +7,18 @@ describe('Service GET_products', () => {
 	});
 
 	const products = GET_products({page_size: 12, page_number: 1});
+	const productsFilterd = GET_products({
+		page_size: 12,
+		page_number: 1,
+		searchProductQuery: 'bronze',
+	});
 
 	test('should be have 100 length', () => {
 		expect(products.data).toHaveLength(12);
+	});
+
+	test('should be have filtered data', () => {
+		expect(productsFilterd.data).toBeTruthy();
 	});
 
 	test('check data type', () => {

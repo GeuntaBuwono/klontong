@@ -1,14 +1,16 @@
+import FormInput from '@components/Form/FormInput';
 import DashboardLayout from '@layouts/DashboardLayout';
 import {queryClient} from '@pages/_app';
 import {DELETE_productById} from '@services/DELETE_productById';
 import {GET_products, GET_ProductsResponse} from '@services/GET_products';
 import {rgbDataURL} from '@utils/rgbDataURL';
 import classNames from 'classnames';
+import {useFormik} from 'formik';
 import Image from 'next/image';
 import Link from 'next/link';
 import {useState} from 'react';
 import {useMutation, useQuery} from 'react-query';
-
+import * as yup from 'yup';
 const ProductCardSkeleton = () => (
 	<div className="border border-blue-300 shadow rounded-md max-w-sm w-full mx-auto">
 		<div className="animate-pulse flex flex-col">
@@ -77,7 +79,7 @@ const ProductCard = ({
 				/>
 				<div className="px-6 py-4">
 					<div className="mb-2">
-						<p className="text-2xl font-semibold text-center line-clamp-1">
+						<p className="text-2xl font-semibold text-center line-clamp-1 capitalize">
 							{name}
 						</p>
 						<p className="line-clamp-3">{description}</p>
@@ -188,19 +190,43 @@ const Pagination = ({
 
 const NoDataFound = () => <h4>No Product Found</h4>;
 
+const SearchProductSchema = yup.object({
+	productTitle: yup.string().min(3).max(20),
+});
+type SearchProduct = yup.InferType<typeof SearchProductSchema>;
+
 export default function ProductPage() {
 	const [activePage, setActivePage] = useState(1);
 
-	const {data: products, isLoading: isLoadingProduct} = useQuery(
-		['products', activePage],
+	const formik = useFormik<SearchProduct>({
+		initialValues: {
+			productTitle: '',
+		},
+		validationSchema: SearchProductSchema,
+		onSubmit: values => {
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			refetchProducts({
+				queryKey: ['products', activePage, values.productTitle],
+			});
+		},
+	});
+
+	const {
+		data: products,
+		isLoading: isLoadingProduct,
+		refetch: refetchProducts,
+	} = useQuery(
+		['products', activePage, formik.values.productTitle],
 		({queryKey}) => {
 			return GET_products({
 				page_size: 12,
 				page_number: Number(queryKey[1]),
+				searchProductQuery: String(queryKey[2]),
 			});
 		},
 		{
 			keepPreviousData: true,
+			enabled: !formik.values.productTitle,
 		},
 	);
 
@@ -228,13 +254,28 @@ export default function ProductPage() {
 
 	return (
 		<DashboardLayout pageTitle="Product">
-			<div className="flex pb-4 text-center">
+			<div className="flex pb-4 text-center flex-col w-full max-w-md">
 				<Link
 					href="/dashboard/product/add"
 					className="border-blue-400 border-2 p-2 text-2xl"
 				>
 					<h3>Add Product</h3>
 				</Link>
+				<form onSubmit={formik.handleSubmit} className="w-full max-w-md">
+					<FormInput
+						id="productTitle"
+						label="Search Product"
+						placeholder={`Search Product by title`}
+						value={formik.values.productTitle}
+						onChange={formik.handleChange}
+						onBlur={formik.handleBlur}
+						errorMessage={
+							formik.errors.productTitle && formik.touched.productTitle
+								? formik.errors.productTitle
+								: null
+						}
+					/>
+				</form>
 			</div>
 
 			{isLoadingPage && (

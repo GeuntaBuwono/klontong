@@ -4,9 +4,10 @@ import {productDataBuilder} from '@utils/productDataBuilder';
 
 type PageSizeType = 12;
 
-type GET_ProductsProps = {
+type GET_ProductsParams = {
 	page_size: PageSizeType;
 	page_number: number;
+	searchProductQuery?: string;
 };
 
 export type GET_ProductsResponse = {
@@ -18,7 +19,8 @@ export type GET_ProductsResponse = {
 export const GET_products = ({
 	page_number,
 	page_size,
-}: GET_ProductsProps): GET_ProductsResponse => {
+	searchProductQuery,
+}: GET_ProductsParams): GET_ProductsResponse => {
 	// TODO: add integration with GET product endpoint
 	productDataBuilder();
 
@@ -33,6 +35,16 @@ export const GET_products = ({
 		page_number,
 	});
 
+	if (searchProductQuery && searchProductQuery?.length > 2) {
+		const filteredDataByName = data.filter(value =>
+			value.name.toLowerCase().includes(searchProductQuery.toLocaleLowerCase()),
+		);
+		return {
+			data: filteredDataByName,
+			total: filteredDataByName.length,
+			isHasMore: false,
+		};
+	}
 	return {
 		data: dataPaginate,
 		total: data.length,
