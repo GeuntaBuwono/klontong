@@ -24,6 +24,19 @@ export default function ProductPage() {
 
 	const [activePage, setActivePage] = useState(Number(query.page || 1));
 
+	const updateQueryString = ({page}: {page: number}) => {
+		push(
+			{
+				pathname: '/dashboard/product',
+				query: {page: encodeURI(String(page))},
+			},
+			undefined,
+			{
+				shallow: true,
+			},
+		);
+	};
+
 	const formik = useFormik<SearchProduct>({
 		initialValues: {
 			productName: '',
@@ -33,6 +46,9 @@ export default function ProductPage() {
 			// eslint-disable-next-line @typescript-eslint/no-use-before-define
 			refetchProducts({
 				queryKey: ['products', activePage, values.productName],
+			}).finally(() => {
+				updateQueryString({page: 1});
+				setActivePage(1);
 			});
 		},
 	});
@@ -75,19 +91,6 @@ export default function ProductPage() {
 			}
 		},
 	});
-
-	const updateQueryString = ({page}: {page: number}) => {
-		push(
-			{
-				pathname: '/dashboard/product',
-				query: {page: encodeURI(String(page))},
-			},
-			undefined,
-			{
-				shallow: true,
-			},
-		);
-	};
 
 	const isLoadingPage = isLoadingProduct || isLoadingDeleteProduct;
 
