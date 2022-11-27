@@ -101,9 +101,7 @@ export default function ProductPage() {
 
 	const isLoadingPage = isLoadingProduct || isLoadingDeleteProduct;
 
-	const isFormHasError =
-		Object.keys(formik.touched).length === 0 ||
-		Object.keys(formik.errors).length !== 0;
+	const isFormHasError = Object.keys(formik.errors).length !== 0;
 
 	const btnSubmitClassName = classNames(
 		'bg-blue-400 rounded-sm p-2 w-full text-white',
@@ -128,9 +126,7 @@ export default function ProductPage() {
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
 						errorMessage={
-							formik.errors.productName && formik.touched.productName
-								? formik.errors.productName
-								: null
+							formik.errors.productName ? formik.errors.productName : null
 						}
 					/>
 					<button
