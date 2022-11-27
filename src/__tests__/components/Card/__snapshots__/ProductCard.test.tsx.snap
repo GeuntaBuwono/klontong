@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProductCard snapshot 1`] = `
+<ProductCard
+  description="testing description"
+  harga={5000}
+  id={1}
+  image="https://loremflickr.com/640/480/abstract?random=1669555427495"
+  name="testing name"
+  onClickDelete={[MockFunction]}
+/>
+`;
+
+exports[`ProductCardSkeleton snapshot 1`] = `<ProductCardSkeleton />`;
