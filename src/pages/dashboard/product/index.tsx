@@ -7,6 +7,7 @@ import {DELETE_productById} from '@services/DELETE_productById';
 import {GET_products, GET_ProductsResponse} from '@services/GET_products';
 import {useFormik} from 'formik';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
 import {useState} from 'react';
 import {useMutation, useQuery} from 'react-query';
 import * as yup from 'yup';
@@ -19,7 +20,9 @@ const SearchProductSchema = yup.object({
 type SearchProduct = yup.InferType<typeof SearchProductSchema>;
 
 export default function ProductPage() {
-	const [activePage, setActivePage] = useState(1);
+	const {query, push} = useRouter();
+
+	const [activePage, setActivePage] = useState(Number(query.page || 1));
 
 	const formik = useFormik<SearchProduct>({
 		initialValues: {
@@ -72,6 +75,19 @@ export default function ProductPage() {
 			}
 		},
 	});
+
+	const updateQueryString = ({page}: {page: number}) => {
+		push(
+			{
+				pathname: '/dashboard/product',
+				query: {page: encodeURI(String(page))},
+			},
+			undefined,
+			{
+				shallow: true,
+			},
+		);
+	};
 
 	const isLoadingPage = isLoadingProduct || isLoadingDeleteProduct;
 
@@ -129,8 +145,19 @@ export default function ProductPage() {
 					<Pagination
 						activePage={activePage}
 						isHasNextPage={!!products?.isHasMore}
-						onClickPrev={() => setActivePage(prev => prev - 1)}
-						onClickNext={() => setActivePage(prev => prev + 1)}
+						onClickPrev={() => {
+							updateQueryString({
+								page: activePage - 1,
+							});
+
+							setActivePage(prev => prev - 1);
+						}}
+						onClickNext={() => {
+							updateQueryString({
+								page: activePage + 1,
+							});
+							setActivePage(prev => prev + 1);
+						}}
 					/>
 				</>
 			)}
