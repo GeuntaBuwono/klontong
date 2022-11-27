@@ -8,3 +8,12 @@ exports[`FormUploadImage snapshot 1`] = `
   placeholder="placeholder testing"
 />
 `;
+
+exports[`FormUploadImage snapshot ElementWithoutPlaceholder 1`] = `
+<FormUploadImage
+  id="uploadImage"
+  onBlur={[MockFunction]}
+  onChange={[MockFunction]}
+  placeholder="placeholder testing"
+/>
+`;

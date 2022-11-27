@@ -11,6 +11,10 @@ describe('FormUploadImage', () => {
 		/>
 	);
 
+	const testElementWithoutPlaceholder = (
+		<FormUploadImage id="uploadImage" onBlur={jest.fn()} onChange={jest.fn()} />
+	);
+
 	const testElementWithError = (
 		<FormUploadImage
 			placeholder="placeholder testing"
@@ -25,9 +29,19 @@ describe('FormUploadImage', () => {
 		expect(testElement).toMatchSnapshot();
 	});
 
+	test('snapshot ElementWithoutPlaceholder', () => {
+		expect(testElement).toMatchSnapshot();
+	});
+
 	test('render correctly', () => {
 		render(testElement);
 		const testInput = screen.getByLabelText('placeholder testing');
+		expect(testInput).toBeInTheDocument();
+	});
+
+	test('render correctly', () => {
+		render(testElementWithoutPlaceholder);
+		const testInput = screen.getByLabelText('Select a image of product');
 		expect(testInput).toBeInTheDocument();
 	});
 

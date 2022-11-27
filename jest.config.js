@@ -27,7 +27,7 @@ const customJestConfig = {
 		'./src/pages/dashboard',
 		'./src/pages/_app.tsx',
 	],
-	coverageProvider: 'v8',
+	collectCoverage: true,
 	collectCoverageFrom: [
 		'src/**/*.{js,jsx,ts,tsx}',
 		'!src/**/*.d.ts',
@@ -41,7 +41,7 @@ const customJestConfig = {
 			statements: 90,
 		},
 	},
-	coverageReporters: ['text'],
+	coverageReporters: ['text', 'lcov'],
 };
 
 module.exports = createJestConfig(customJestConfig);
