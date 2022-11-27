@@ -36,87 +36,69 @@ const ProductCardSkeleton = () => (
 	</div>
 );
 
-type ProductTypeProps = {
+type ProductCardProps = {
 	onClickDelete: () => void;
-} & ProductType;
+} & Omit<
+	ProductType,
+	| 'categoryName'
+	| 'width'
+	| 'weight'
+	| 'sku'
+	| 'length'
+	| 'height'
+	| 'CategoryId'
+>;
 
 const ProductCard = ({
 	id,
 	image,
 	description,
-	categoryName,
-	width,
-	weight,
-	sku,
 	name,
-	length,
-	height,
 	harga,
-	CategoryId,
 	onClickDelete,
-}: ProductTypeProps) => {
-	const borderClassName = classNames('border-2 p-2 my-2');
-
-	return (
-		<div className="bg-slate-100 text-white rounded-xl dark:bg-slate-800 md:max-w-md">
-			<Link
-				href={{
-					pathname: '/dashboard/product/[id]',
-					query: {id: String(id)},
+}: ProductCardProps) => (
+	<div className="bg-slate-100 text-white rounded-xl dark:bg-slate-800 md:max-w-md">
+		<Link
+			href={{
+				pathname: '/dashboard/product/[id]',
+				query: {id: String(id)},
+			}}
+		>
+			<Image
+				src={image}
+				alt={description}
+				blurDataURL={rgbDataURL(243, 243, 243)}
+				width="512"
+				height="250"
+				placeholder="blur"
+				style={{
+					height: 'auto',
+					maxHeight: '200px',
 				}}
-			>
-				<Image
-					src={image}
-					alt={description}
-					blurDataURL={rgbDataURL(243, 243, 243)}
-					width="512"
-					height="250"
-					placeholder="blur"
-					style={{
-						height: 'auto',
-						maxHeight: '200px',
-					}}
-				/>
-				<div className="px-6 py-4">
-					<div className="mb-2">
-						<p className="text-2xl font-semibold text-center line-clamp-1 capitalize">
-							{name}
-						</p>
-						<p className="line-clamp-3">{description}</p>
-					</div>
-
-					<div className={borderClassName}>
-						<p>Category ID: {CategoryId}</p>
-						<p>Category Name: {categoryName}</p>
-						<p>SKU: {sku}</p>
-					</div>
-
-					<div className={borderClassName}>
-						<h4 className="text-center border-b-2 mb-2 pb-2 font-semibold">
-							Product Detail
-						</h4>
-						<p>Height: {height}</p>
-						<p>Width: {width}</p>
-						<p>Weight: {weight}</p>
-						<p>Length: {length}</p>
-					</div>
+			/>
+			<div className="px-6 py-4">
+				<div className="mb-2">
+					<p className="text-2xl font-semibold text-center line-clamp-1 capitalize">
+						{name}
+					</p>
+					<p className="line-clamp-3">{description}</p>
 				</div>
-				<div className="px-6 py-4 flex justify-between text-lg font-semibold">
-					<span>Harga</span>
-					<p>Rp.{harga}</p>
-				</div>
-			</Link>
-			<div className="flex flex-1 justify-center">
-				<button
-					className="w-full py-2 bg-red-700 text-white rounded-b-sm"
-					onClick={onClickDelete}
-				>
-					<span>Remove Product</span>
-				</button>
 			</div>
+			<div className="px-6 py-4 flex justify-between text-lg font-semibold">
+				<span>Harga</span>
+				<p>Rp.{harga}</p>
+			</div>
+		</Link>
+		<div className="flex flex-1 justify-center">
+			<button
+				className="w-full py-2 bg-red-700 text-white rounded-b-sm"
+				onClick={onClickDelete}
+			>
+				<span>Remove Product</span>
+			</button>
 		</div>
-	);
-};
+	</div>
+);
 
 type PaginationProps = {
 	activePage: number;
@@ -191,7 +173,7 @@ const Pagination = ({
 const NoDataFound = () => <h4>No Product Found</h4>;
 
 const SearchProductSchema = yup.object({
-	productTitle: yup.string().min(3).max(20),
+	productName: yup.string().min(3).max(20),
 });
 type SearchProduct = yup.InferType<typeof SearchProductSchema>;
 
@@ -200,13 +182,13 @@ export default function ProductPage() {
 
 	const formik = useFormik<SearchProduct>({
 		initialValues: {
-			productTitle: '',
+			productName: '',
 		},
 		validationSchema: SearchProductSchema,
 		onSubmit: values => {
 			// eslint-disable-next-line @typescript-eslint/no-use-before-define
 			refetchProducts({
-				queryKey: ['products', activePage, values.productTitle],
+				queryKey: ['products', activePage, values.productName],
 			});
 		},
 	});
@@ -216,7 +198,7 @@ export default function ProductPage() {
 		isLoading: isLoadingProduct,
 		refetch: refetchProducts,
 	} = useQuery(
-		['products', activePage, formik.values.productTitle],
+		['products', activePage, formik.values.productName],
 		({queryKey}) => {
 			return GET_products({
 				page_size: 12,
@@ -226,7 +208,7 @@ export default function ProductPage() {
 		},
 		{
 			keepPreviousData: true,
-			enabled: !formik.values.productTitle,
+			enabled: !formik.values.productName,
 		},
 	);
 
@@ -263,15 +245,15 @@ export default function ProductPage() {
 				</Link>
 				<form onSubmit={formik.handleSubmit} className="w-full max-w-md">
 					<FormInput
-						id="productTitle"
+						id="productName"
 						label="Search Product"
-						placeholder={`Search Product by title`}
-						value={formik.values.productTitle}
+						placeholder={`Search Product by Name`}
+						value={formik.values.productName}
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
 						errorMessage={
-							formik.errors.productTitle && formik.touched.productTitle
-								? formik.errors.productTitle
+							formik.errors.productName && formik.touched.productName
+								? formik.errors.productName
 								: null
 						}
 					/>
