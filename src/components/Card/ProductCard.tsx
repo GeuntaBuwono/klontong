@@ -50,8 +50,9 @@ export const ProductCard = ({
 	onClickEdit,
 	onClickDelete,
 }: ProductCardProps) => (
-	<div className="bg-slate-100 text-white rounded-xl dark:bg-slate-800 md:max-w-md">
+	<div className="flex flex-col bg-slate-100 text-white rounded-xl dark:bg-slate-800 md:max-w-md">
 		<Link
+			className="h-full flex flex-col justify-end"
 			href={{
 				pathname: '/dashboard/product/[id]',
 				query: {id: String(id)},
@@ -65,7 +66,7 @@ export const ProductCard = ({
 					width="512"
 					height="250"
 					placeholder="blur"
-					className="object-fill w-auto h-auto max-h-[500px]"
+					className="object-fill w-auto h-full max-h-[500px]"
 				/>
 			)}
 			<div className="px-6 py-4">
