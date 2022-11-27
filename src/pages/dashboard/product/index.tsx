@@ -1,7 +1,7 @@
 import DashboardLayout from '@layouts/DashboardLayout';
 import {queryClient} from '@pages/_app';
 import {DELETE_productById} from '@services/DELETE_productById';
-import {GET_products} from '@services/GET_products';
+import {GET_products, GET_ProductsResponse} from '@services/GET_products';
 import {rgbDataURL} from '@utils/rgbDataURL';
 import classNames from 'classnames';
 import Image from 'next/image';
@@ -186,7 +186,7 @@ const Pagination = ({
 	);
 };
 
-const NoDataFound = () => <h4>No Product found you</h4>;
+const NoDataFound = () => <h4>No Product Found</h4>;
 
 export default function ProductPage() {
 	const [activePage, setActivePage] = useState(1);
@@ -210,6 +210,17 @@ export default function ProductPage() {
 	} = useMutation(['deleteProduct'], DELETE_productById, {
 		onSuccess: () => {
 			queryClient.invalidateQueries(['products', activePage]);
+			const productDataFromCache: GET_ProductsResponse | undefined =
+				queryClient.getQueryData(['products', activePage]);
+
+			const isEmptyActivePage = productDataFromCache?.data.length === 1;
+
+			const isShouldNavigateToPreviousPage =
+				isEmptyActivePage && activePage !== 1;
+
+			if (isShouldNavigateToPreviousPage) {
+				setActivePage(prev => prev - 1);
+			}
 		},
 	});
 

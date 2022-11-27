@@ -9,7 +9,7 @@ type GET_ProductsProps = {
 	page_number: number;
 };
 
-type GET_ProductsResponse = {
+export type GET_ProductsResponse = {
 	data: Array<ProductType>;
 	total: number;
 	isHasMore: boolean;
