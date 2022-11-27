@@ -129,7 +129,7 @@ export default function AddProductPage() {
 				onSubmit={isFormHasError ? undefined : formik.handleSubmit}
 				className="w-full max-w-md"
 			>
-				{formik.values.image ? (
+				{formik.values.image && typeof formik.values.image === 'string' ? (
 					<>
 						<Image
 							src={formik.values.image}

@@ -32,20 +32,22 @@ export default function ProductDetailPage() {
 				pageTitle={dataDetailProduct?.name ?? ''}
 				isCenterContent
 			>
-				<Image
-					className="py-4"
-					src={dataDetailProduct?.image}
-					alt={dataDetailProduct?.description}
-					blurDataURL={rgbDataURL(243, 243, 243)}
-					width="512"
-					height="512"
-					placeholder="blur"
-					style={{
-						width: '100%',
-						maxHeight: '512px',
-						objectFit: 'contain',
-					}}
-				/>
+				{typeof dataDetailProduct?.image === 'string' && (
+					<Image
+						className="py-4"
+						src={dataDetailProduct?.image}
+						alt={dataDetailProduct?.description}
+						blurDataURL={rgbDataURL(243, 243, 243)}
+						width="512"
+						height="512"
+						placeholder="blur"
+						style={{
+							width: '100%',
+							maxHeight: '512px',
+							objectFit: 'contain',
+						}}
+					/>
+				)}
 				<p>{dataDetailProduct?.description}</p>
 				<div className="flex flex-1 flex-col w-full">
 					<div className={borderClassName}>

@@ -57,18 +57,20 @@ export const ProductCard = ({
 				query: {id: String(id)},
 			}}
 		>
-			<Image
-				src={image}
-				alt={description}
-				blurDataURL={rgbDataURL(243, 243, 243)}
-				width="512"
-				height="250"
-				placeholder="blur"
-				style={{
-					height: 'auto',
-					maxHeight: '200px',
-				}}
-			/>
+			{typeof image === 'string' && (
+				<Image
+					src={image}
+					alt={description}
+					blurDataURL={rgbDataURL(243, 243, 243)}
+					width="512"
+					height="250"
+					placeholder="blur"
+					style={{
+						height: 'auto',
+						maxHeight: '200px',
+					}}
+				/>
+			)}
 			<div className="px-6 py-4">
 				<div className="mb-2">
 					<p className="text-2xl font-semibold text-center line-clamp-1 capitalize">
