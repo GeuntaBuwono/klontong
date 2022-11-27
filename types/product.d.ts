@@ -14,4 +14,4 @@ type ProductType = {
 };
 
 type OmitKeyForPostProductType = 'id' | 'CategoryId';
-type PostProductType = Partial<Omit<ProductType, OmitKeyForPostProductType>>;
+type PostProductType = Omit<ProductType, OmitKeyForPostProductType>;

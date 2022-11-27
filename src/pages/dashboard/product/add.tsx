@@ -1,9 +1,11 @@
 import FormInput from '@components/Form/FormInput';
 import FormUploadImage from '@components/Form/FormUploadImage';
 import DashboardLayout from '@layouts/DashboardLayout';
+import {POST_addProduct} from '@services/POST_addProduct';
 import classNames from 'classnames';
 import {useFormik} from 'formik';
 import Image from 'next/image';
+import {useMutation} from 'react-query';
 import * as yup from 'yup';
 
 const labelFormatterFormInput = ({value}: {value: string}) => {
@@ -25,7 +27,7 @@ const AddProductSchema = yup.object({
 	sku: yup.string().min(2).max(20).required(),
 	name: yup.string().min(2).max(20).required(),
 	length: yup.number().min(1).required(),
-	image: yup.string().min(2).max(20).required(),
+	image: yup.string().required(),
 	height: yup.number().min(1).required(),
 	harga: yup.number().min(1).required(),
 	description: yup.string().min(2).max(20).required(),
@@ -33,6 +35,9 @@ const AddProductSchema = yup.object({
 type AddProduct = yup.InferType<typeof AddProductSchema>;
 
 export default function AddProductPage() {
+	const {mutateAsync: mutationAsyncAddProduct, isLoading: isLoadingAddProduct} =
+		useMutation('addProduct', POST_addProduct);
+
 	const formik = useFormik<AddProduct>({
 		initialValues: {
 			categoryName: '',
@@ -48,7 +53,9 @@ export default function AddProductPage() {
 		},
 		validationSchema: AddProductSchema,
 		onSubmit: data => {
-			alert(JSON.stringify(data, null, 2));
+			mutationAsyncAddProduct({
+				data,
+			});
 		},
 	});
 
@@ -67,7 +74,7 @@ export default function AddProductPage() {
 				{formik.values.image ? (
 					<>
 						<Image
-							src={URL.createObjectURL(formik.values.image as unknown as Blob)}
+							src="https://loremflickr.com/640/480/abstract?random=1669417413823"
 							alt=""
 							className="rounded-sm"
 							width={500}
@@ -130,12 +137,20 @@ export default function AddProductPage() {
 						}
 						return null;
 					})}
+
 				<button
 					type="submit"
 					className={btnSubmitClassName}
 					disabled={isFormHasError}
 				>
-					Submit
+					{isLoadingAddProduct ? (
+						<div className="flex items-center justify-center">
+							<div className="w-6 h-6 border-b-2 border-blue-500 rounded-full animate-spin"></div>
+							<span className="ml-4">Loading...</span>
+						</div>
+					) : (
+						<span>Submit</span>
+					)}
 				</button>
 			</form>
 		</DashboardLayout>
