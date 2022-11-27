@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import {useFormik} from 'formik';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useMutation, useQuery} from 'react-query';
 import * as yup from 'yup';
 
@@ -23,7 +23,13 @@ type SearchProduct = yup.InferType<typeof SearchProductSchema>;
 export default function ProductPage() {
 	const {query, push} = useRouter();
 
-	const [activePage, setActivePage] = useState(Number(query.page || 1));
+	const [activePage, setActivePage] = useState(1);
+
+	useEffect(() => {
+		if (query.page) {
+			setActivePage(Number(query.page));
+		}
+	}, [query.page]);
 
 	const updateQueryString = ({page}: {page: number}) => {
 		push(
