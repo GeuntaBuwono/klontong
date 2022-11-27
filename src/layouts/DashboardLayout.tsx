@@ -26,7 +26,12 @@ const Navigation = () => {
 	return (
 		<nav className={navigationClassName}>
 			<Link
-				href="/dashboard/product"
+				href={{
+					pathname: '/dashboard/product',
+					query: {
+						page: String(1),
+					},
+				}}
 				className="flex flex-1 items-center px-4 h-full cursor-pointer"
 			>
 				<p className="text-2xl mr-2">&#5130;</p>
