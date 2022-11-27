@@ -9,9 +9,9 @@ describe('Product Data Builder', () => {
 
 	const {getItemArray, setItemArray} = appLocalStorage();
 
-	test('should be have 10 length', () => {
+	test('should be have 100 length', () => {
 		const testValue = productDataBuilder();
-		expect(testValue).toHaveLength(10);
+		expect(testValue).toHaveLength(100);
 	});
 
 	test('check data type', () => {

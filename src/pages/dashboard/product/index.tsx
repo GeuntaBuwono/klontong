@@ -2,7 +2,6 @@ import DashboardLayout from '@layouts/DashboardLayout';
 import {queryClient} from '@pages/_app';
 import {DELETE_productById} from '@services/DELETE_productById';
 import {GET_products} from '@services/GET_products';
-import {appLocalStorage} from '@utils/appLocalStorage';
 import {rgbDataURL} from '@utils/rgbDataURL';
 import classNames from 'classnames';
 import Image from 'next/image';
@@ -139,50 +138,45 @@ const Pagination = ({
 					{activePage > 1 && (
 						<>
 							<li className="page-item">
-								<a
+								<button
 									onClick={onClickPrev}
 									className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-									href="#"
 								>
 									Prev
-								</a>
+								</button>
 							</li>
 							<li className={pageItemClassName}>
-								<a
+								<button
+									onClick={onClickPrev}
 									className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-									href="#"
 								>
 									{activePage - 1}
-								</a>
+								</button>
 							</li>
 						</>
 					)}
 					<li className={pageItemClassName}>
-						<a
-							className="page-link relative block py-1.5 px-3 border-0 bg-blue-600 outline-none transition-all duration-300 text-white hover:text-white hover:bg-blue-600 shadow-md focus:shadow-md"
-							href="#"
-						>
+						<button className="page-link relative block py-1.5 px-3 border-0 bg-blue-600 outline-none transition-all duration-300 text-white hover:text-white hover:bg-blue-600 shadow-md focus:shadow-md">
 							{activePage} <span className="visually-hidden"></span>
-						</a>
+						</button>
 					</li>
 					{isHasNextPage && (
 						<>
 							<li className={pageItemClassName}>
-								<a
-									className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-									href="#"
-								>
-									{activePage + 1}
-								</a>
-							</li>
-							<li className="page-item">
-								<a
+								<button
 									onClick={onClickNext}
 									className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
-									href="#"
+								>
+									{activePage + 1}
+								</button>
+							</li>
+							<li className="page-item">
+								<button
+									onClick={onClickNext}
+									className="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
 								>
 									Next
-								</a>
+								</button>
 							</li>
 						</>
 					)}
@@ -196,20 +190,19 @@ const NoDataFound = () => <h4>No Product found you</h4>;
 
 export default function ProductPage() {
 	const [activePage, setActivePage] = useState(1);
-	const {setItemArray} = appLocalStorage();
 
-	const {
-		data: products,
-		isLoading: isLoadingProduct,
-		// TODO: add integration with GET product endpoint
-	} = useQuery(['products', activePage], GET_products, {
-		onSuccess: data => {
-			setItemArray<ProductType>({
-				key: 'products',
-				value: data,
+	const {data: products, isLoading: isLoadingProduct} = useQuery(
+		['products', activePage],
+		({queryKey}) => {
+			return GET_products({
+				page_size: 12,
+				page_number: Number(queryKey[1]),
 			});
 		},
-	});
+		{
+			keepPreviousData: true,
+		},
+	);
 
 	const {
 		mutateAsync: mutationAsyncDeleteProduct,
@@ -241,12 +234,12 @@ export default function ProductPage() {
 				</div>
 			)}
 
-			{!isLoadingPage && products && products?.length === 0 ? (
+			{!isLoadingPage && products && products?.total === 0 ? (
 				<NoDataFound />
 			) : (
 				<>
-					<div className="flex flex-col gap-4 md:grid md:grid-cols-3">
-						{products?.map(product => (
+					<div className="flex flex-col gap-4 md:grid md:grid-cols-3 pb-4">
+						{products?.data?.map(product => (
 							<ProductCard
 								key={product.id}
 								onClickDelete={() => {
@@ -260,7 +253,7 @@ export default function ProductPage() {
 					</div>
 					<Pagination
 						activePage={activePage}
-						isHasNextPage={activePage !== 10}
+						isHasNextPage={!!products?.isHasMore}
 						onClickPrev={() => setActivePage(prev => prev - 1)}
 						onClickNext={() => setActivePage(prev => prev + 1)}
 					/>

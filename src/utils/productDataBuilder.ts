@@ -1,10 +1,10 @@
 import {faker} from '@faker-js/faker';
 import {appLocalStorage} from './appLocalStorage';
 
-const MAX_PRODUCT = 10;
+const MAX_PRODUCT = 100;
 
 export const productDataBuilder = (): Array<ProductType> => {
-	const {getItemArray} = appLocalStorage();
+	const {getItemArray, setItemArray} = appLocalStorage();
 
 	const localStorageProducts = getItemArray<ProductType>({
 		key: 'products',
@@ -32,6 +32,10 @@ export const productDataBuilder = (): Array<ProductType> => {
 			};
 			products.push(productEntity);
 		}
+		setItemArray({
+			key: 'products',
+			value: products,
+		});
 	}
 
 	return products;
