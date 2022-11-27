@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Pagination snapshot 1`] = `
+<Pagination
+  activePage={1}
+  isHasNextPage={false}
+  onClickNext={[MockFunction]}
+  onClickPrev={[MockFunction]}
+/>
+`;
