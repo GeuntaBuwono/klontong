@@ -1,4 +1,5 @@
 import DashboardLayout from '@layouts/DashboardLayout';
+import {appLocalStorage} from '@utils/appLocalStorage';
 import {rgbDataURL} from '@utils/rgbDataURL';
 import classNames from 'classnames';
 import Image from 'next/image';
@@ -8,16 +9,18 @@ import {useQuery} from 'react-query';
 export default function ProductDetailPage() {
 	const router = useRouter();
 
+	const {getItemArray} = appLocalStorage();
+
 	const borderClassName = classNames('border-2 p-2 my-2');
 
 	const {data: dataDetailProduct} = useQuery(
 		['detailProduct', router.query.id],
 		({queryKey}) => {
-			const localStorageProducts = localStorage.getItem('products');
-			const localStorageProductsJSON: Array<ProductType> =
-				localStorageProducts && JSON.parse(localStorageProducts);
+			const localStorageProducts = getItemArray<ProductType>({
+				key: 'products',
+			});
 
-			return localStorageProductsJSON.find(
+			return localStorageProducts.find(
 				value => value.id === Number(queryKey[1]),
 			);
 		},

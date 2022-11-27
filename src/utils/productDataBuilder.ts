@@ -1,11 +1,17 @@
 import {faker} from '@faker-js/faker';
+import {appLocalStorage} from './appLocalStorage';
 
 const MAX_PRODUCT = 10;
 
 export const productDataBuilder = (): Array<ProductType> => {
-	const localStorageProducts = localStorage.getItem('products');
+	const {getItemArray} = appLocalStorage();
+
+	const localStorageProducts = getItemArray<ProductType>({
+		key: 'products',
+	});
+
 	const products: Array<ProductType> = localStorageProducts
-		? JSON.parse(localStorageProducts)
+		? localStorageProducts
 		: [];
 
 	if (!localStorageProducts) {

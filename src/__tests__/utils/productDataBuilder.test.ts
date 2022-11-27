@@ -1,13 +1,14 @@
+import {appLocalStorage} from '@utils/appLocalStorage';
 import {productDataBuilder} from '@utils/productDataBuilder';
 
-beforeEach(() => {
-	// to fully reset the state between tests, clear the storage
-	localStorage.clear();
-	// and reset all mocks
-	jest.clearAllMocks();
-});
-
 describe('Product Data Builder', () => {
+	beforeEach(() => {
+		localStorage.clear();
+		jest.clearAllMocks();
+	});
+
+	const {getItemArray, setItemArray} = appLocalStorage();
+
 	test('should be have 10 length', () => {
 		const testValue = productDataBuilder();
 		expect(testValue).toHaveLength(10);
@@ -49,13 +50,22 @@ describe('Product Data Builder', () => {
 			},
 		];
 
-		const MOCK_PRODUCT_LOCAL_STORAGE = JSON.stringify(TEST_PRODUCT_ARRAY);
-
-		expect(localStorage.getItem('products')).toBeNull();
 		expect(
-			localStorage.setItem('products', MOCK_PRODUCT_LOCAL_STORAGE),
+			getItemArray<ProductType>({
+				key: 'products',
+			}),
+		).toBeNull();
+		expect(
+			setItemArray<ProductType>({
+				key: 'products',
+				value: TEST_PRODUCT_ARRAY,
+			}),
 		).toBeUndefined();
-		expect(localStorage.getItem('products')).toBe(MOCK_PRODUCT_LOCAL_STORAGE);
+		expect(
+			getItemArray<ProductType>({
+				key: 'products',
+			}),
+		).toStrictEqual(TEST_PRODUCT_ARRAY);
 
 		const testValue = productDataBuilder();
 		expect(testValue).toHaveLength(1);
