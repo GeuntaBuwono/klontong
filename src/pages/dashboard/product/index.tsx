@@ -1,11 +1,14 @@
 import DashboardLayout from '@layouts/DashboardLayout';
-import {productDataBuilder} from '@utils/productDataBuilder';
+import {queryClient} from '@pages/_app';
+import {DELETE_productById} from '@services/DELETE_productById';
+import {GET_products} from '@services/GET_products';
+import {appLocalStorage} from '@utils/appLocalStorage';
 import {rgbDataURL} from '@utils/rgbDataURL';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 import {useState} from 'react';
-import {useQuery} from 'react-query';
+import {useMutation, useQuery} from 'react-query';
 
 const ProductCardSkeleton = () => (
 	<div className="border border-blue-300 shadow rounded-md max-w-sm w-full mx-auto">
@@ -193,15 +196,31 @@ const NoDataFound = () => <h4>No Product found you</h4>;
 
 export default function ProductPage() {
 	const [activePage, setActivePage] = useState(1);
+	const {setItemArray} = appLocalStorage();
+
 	const {
 		data: products,
 		isLoading: isLoadingProduct,
-		refetch: refetchProducts,
-	} = useQuery(['products', activePage], productDataBuilder, {
+		// TODO: add integration with GET product endpoint
+	} = useQuery(['products', activePage], GET_products, {
 		onSuccess: data => {
-			localStorage.setItem('products', JSON.stringify(data));
+			setItemArray<ProductType>({
+				key: 'products',
+				value: data,
+			});
 		},
 	});
+
+	const {
+		mutateAsync: mutationAsyncDeleteProduct,
+		isLoading: isLoadingDeleteProduct,
+	} = useMutation(['deleteProduct'], DELETE_productById, {
+		onSuccess: () => {
+			queryClient.invalidateQueries(['products', activePage]);
+		},
+	});
+
+	const isLoadingPage = isLoadingProduct || isLoadingDeleteProduct;
 
 	return (
 		<DashboardLayout pageTitle="Product">
@@ -214,7 +233,7 @@ export default function ProductPage() {
 				</Link>
 			</div>
 
-			{isLoadingProduct && (
+			{isLoadingPage && (
 				<div className="w-full pt-2 flex flex-col gap-4 md:grid md:grid-cols-3">
 					{Array.from({length: 9}).map((_, index) => (
 						<ProductCardSkeleton key={index} />
@@ -222,7 +241,7 @@ export default function ProductPage() {
 				</div>
 			)}
 
-			{!isLoadingProduct && products && products?.length === 0 ? (
+			{!isLoadingPage && products && products?.length === 0 ? (
 				<NoDataFound />
 			) : (
 				<>
@@ -231,21 +250,9 @@ export default function ProductPage() {
 							<ProductCard
 								key={product.id}
 								onClickDelete={() => {
-									const productsFromLocalStorage: Array<ProductType> =
-										JSON.parse(localStorage.getItem('products') as string);
-
-									const selectedProductByIndex =
-										productsFromLocalStorage.findIndex(
-											data => data.id === product.id,
-										);
-
-									productsFromLocalStorage.splice(selectedProductByIndex, 1);
-									localStorage.setItem(
-										'products',
-										JSON.stringify(productsFromLocalStorage),
-									);
-
-									refetchProducts();
+									mutationAsyncDeleteProduct({
+										productId: product.id,
+									});
 								}}
 								{...product}
 							/>
