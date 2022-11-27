@@ -20,7 +20,7 @@ export const productDataBuilder = (): Array<ProductType> => {
 				id: faker.datatype.number(),
 				CategoryId: faker.datatype.number(),
 				categoryName: faker.commerce.product(),
-				sku: faker.random.alphaNumeric().toUpperCase(),
+				sku: faker.random.alphaNumeric(5).toUpperCase(),
 				name: faker.commerce.productName(),
 				description: faker.lorem.paragraphs(),
 				weight: 500,
